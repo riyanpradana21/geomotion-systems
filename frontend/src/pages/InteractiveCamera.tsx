@@ -114,9 +114,9 @@ export const InteractiveCamera: React.FC<InteractiveCameraProps> = ({
     (strokes: Stroke[], snapshotDataUrl: string) => {
       let result: RecognitionResultData;
       if (activeDimension === '3D') {
-        result = analyze3DWireframe(strokes, snapshotDataUrl);
+        result = analyze3DWireframe(strokes, snapshotDataUrl, targetShape);
       } else {
-        result = analyze2DGeometry(strokes, snapshotDataUrl);
+        result = analyze2DGeometry(strokes, snapshotDataUrl, targetShape);
       }
       onFinishRecognition(result);
     },

@@ -7,7 +7,7 @@ import {
   Point,
   Tutorial3DStep,
 } from '../types';
-import { getHandLandmarker, classifyHandGesture } from '../services/handTracker';
+import { getHandLandmarker, classifyHandGesture, drawHandSkeleton } from '../services/handTracker';
 import { CursorSmoother, GestureDebouncer } from '../services/smoothing';
 import { sounds } from '../services/sound';
 import {
@@ -188,7 +188,7 @@ export const CameraFeed: React.FC<CameraFeedProps> = ({
               // 2. Render Hand Landmarks
               if (result.landmarks && result.landmarks.length > 0 && settings.showLandmarks) {
                 const lms = result.landmarks[0];
-                drawLandmarks(ctx, lms, overlayCanvas.width, overlayCanvas.height, settings.mirrorCamera);
+                drawHandSkeleton(ctx, lms, overlayCanvas.width, overlayCanvas.height, settings.mirrorCamera, prevPinchGestureRef.current);
               }
             }
           }

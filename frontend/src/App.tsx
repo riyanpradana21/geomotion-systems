@@ -14,7 +14,7 @@ const DEFAULT_SETTINGS: DrawingSettings = {
   penColor: '#4f46e5',
   penWidth: 8,
   smoothFactor: 0.35,
-  pinchThreshold: 0.32,
+  pinchThreshold: 0.42,
   mirrorCamera: true,
   showLandmarks: true,
   soundEnabled: true,
@@ -25,7 +25,7 @@ const DEFAULT_SETTINGS: DrawingSettings = {
   autoCorrectEnabled: true,
   gestureFinishEnabled: true,
   fistHoldDuration: 1800,
-  drawMode: 'pinch',
+  drawMode: 'toggle',
   stabilizerLevel: 'stable',
 };
 

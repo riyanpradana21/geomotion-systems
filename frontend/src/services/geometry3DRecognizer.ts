@@ -95,7 +95,8 @@ function countParallelEdgePairs(edges: Edge[], angleTol = 18): number {
  */
 export function analyze3DWireframe(
   strokes: Stroke[],
-  thumbnailData?: string
+  thumbnailData?: string,
+  targetShapeName?: string | null
 ): RecognitionResultData {
   const timestamp = new Date().toISOString();
   const graph = buildWireframeGraph(strokes);

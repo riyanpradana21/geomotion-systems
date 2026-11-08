@@ -51,7 +51,14 @@ MODELS_CATALOG = [
         "description": "Polihedron beraturan dengan 8 titik sudut, 12 rusuk sama panjang, dan 6 sisi bujur sangkar.",
         "difficulty": "Mudah",
         "color": "#6366f1",
-        "specs": {"vertices": 8, "edges": 12, "faces": 6, "volume_formula": "sisi³"}
+        "specs": {
+            "vertices": 8,
+            "edges": 12,
+            "faces": 6,
+            "luas_permukaan": "6 × s²",
+            "volume_formula": "sisi³",
+            "contoh_nyata": "Dadu, kotak kado, rubik"
+        }
     },
     {
         "id": "cuboid",
@@ -60,7 +67,14 @@ MODELS_CATALOG = [
         "description": "Bangun ruang tiga dimensi yang dibentuk oleh tiga pasang persegi panjang dengan ukuran berbeda.",
         "difficulty": "Mudah",
         "color": "#0ea5e9",
-        "specs": {"vertices": 8, "edges": 12, "faces": 6, "volume_formula": "p × l × t"}
+        "specs": {
+            "vertices": 8,
+            "edges": 12,
+            "faces": 6,
+            "luas_permukaan": "2 × (p·l + p·t + l·t)",
+            "volume_formula": "panjang × lebar × tinggi",
+            "contoh_nyata": "Kardus paket, lemari, batu bata"
+        }
     },
     {
         "id": "pyramid",
@@ -69,7 +83,14 @@ MODELS_CATALOG = [
         "description": "Limas dengan alas berbentuk segiempat dan 4 bidang sisi tegak berbentuk segitiga yang bertemu di satu titik puncak.",
         "difficulty": "Menengah",
         "color": "#f59e0b",
-        "specs": {"vertices": 5, "edges": 8, "faces": 5, "volume_formula": "⅓ × Luas Alas × t"}
+        "specs": {
+            "vertices": 5,
+            "edges": 8,
+            "faces": 5,
+            "luas_permukaan": "Luas Alas + 4 × Luas Sisi Tegak",
+            "volume_formula": "⅓ × Luas Alas × tinggi",
+            "contoh_nyata": "Piramida Giza Mesir, atap gazebo"
+        }
     },
     {
         "id": "triangular_prism",
@@ -78,7 +99,14 @@ MODELS_CATALOG = [
         "description": "Polihedron dengan 2 bidang alas segitiga kongruen yang sejajar dan 3 bidang tegak segiempat.",
         "difficulty": "Menengah",
         "color": "#10b981",
-        "specs": {"vertices": 6, "edges": 9, "faces": 5, "volume_formula": "Luas Alas × t"}
+        "specs": {
+            "vertices": 6,
+            "edges": 9,
+            "faces": 5,
+            "luas_permukaan": "(2 × Luas Alas) + (Keliling Alas × t)",
+            "volume_formula": "Luas Alas Segitiga × tinggi",
+            "contoh_nyata": "Tenda kemping, cokelat toblerone, atap rumah"
+        }
     },
     {
         "id": "cylinder",
@@ -87,7 +115,14 @@ MODELS_CATALOG = [
         "description": "Bangun ruang lengkung yang dibatasi oleh dua lingkaran sejajar dan bidang selimut lengkung.",
         "difficulty": "Menengah",
         "color": "#8b5cf6",
-        "specs": {"vertices": 0, "edges": 2, "faces": 3, "volume_formula": "π × r² × t"}
+        "specs": {
+            "vertices": 0,
+            "edges": 2,
+            "faces": 3,
+            "luas_permukaan": "2πr(r + t)",
+            "volume_formula": "π × r² × tinggi",
+            "contoh_nyata": "Kaleng susu, drum minyak, baterai"
+        }
     },
     {
         "id": "cone",
@@ -96,7 +131,14 @@ MODELS_CATALOG = [
         "description": "Bangun ruang lengkung dengan satu alas lingkaran dan satu titik puncak runcing di atas.",
         "difficulty": "Menengah",
         "color": "#ec4899",
-        "specs": {"vertices": 1, "edges": 1, "faces": 2, "volume_formula": "⅓ × π × r² × t"}
+        "specs": {
+            "vertices": 1,
+            "edges": 1,
+            "faces": 2,
+            "luas_permukaan": "πr(r + s)",
+            "volume_formula": "⅓ × π × r² × tinggi",
+            "contoh_nyata": "Topi ulang tahun, cone es krim, tumpeng"
+        }
     },
     {
         "id": "sphere",
@@ -105,16 +147,30 @@ MODELS_CATALOG = [
         "description": "Bangun ruang beraturan sempurna di mana setiap titik pada permukaan berjarak sama dari titik pusat.",
         "difficulty": "Mudah",
         "color": "#14b8a6",
-        "specs": {"vertices": 0, "edges": 0, "faces": 1, "volume_formula": "⁴⁄₃ × π × r³"}
+        "specs": {
+            "vertices": 0,
+            "edges": 0,
+            "faces": 1,
+            "luas_permukaan": "4 × π × r²",
+            "volume_formula": "⁴⁄₃ × π × r³",
+            "contoh_nyata": "Bola basket, kelereng, bola dunia"
+        }
     },
     {
         "id": "earth",
-        "name": "Bumi & Bola Dunia (Globe)",
+        "name": "Planet Bumi & Lapisan Inti",
         "category": "Objek Edukasi Sains",
-        "description": "Visualisasi 3D planet Bumi dengan garis khatulistiwa, kutub utara-selatan, dan rotasi 360°.",
-        "difficulty": "Eksplorasi",
+        "description": "Visualisasi 3D planet Bumi nyata lengkap dengan benua, samudra, lapisan atmosfer, dan bedah 4 lapisan geologis bumi (Kerak, Mantel, Inti Luar, Inti Dalam).",
+        "difficulty": "Eksplorasi Sains",
         "color": "#0284c7",
-        "specs": {"type": "Sains & Astronomi", "rotasi": "Rotasi 360°", "diameter": "12.742 km"}
+        "specs": {
+            "diameter": "12.742 km",
+            "lapisan_kerak": "0 - 70 km (Batuan Padat)",
+            "lapisan_mantel": "2.900 km (Magma Silikat Panas)",
+            "inti_luar": "2.200 km (Besi Cair Suhu ~4.500°C)",
+            "inti_dalam": "1.220 km (Besi Padat Suhu ~5.400°C)",
+            "atmosfer": "Troposfer, Stratosfer, Mesosfer, Termosfer"
+        }
     },
     {
         "id": "rocket",
@@ -123,7 +179,11 @@ MODELS_CATALOG = [
         "description": "Kombinasi bangun ruang nyata: badan silinder + moncong kerucut + sayap segitiga pendorong.",
         "difficulty": "Kreatif",
         "color": "#ef4444",
-        "specs": {"komposisi": "Silinder + Kerucut + Prisma", "fungsi": "Peluncur Luar Angkasa"}
+        "specs": {
+            "komposisi": "Silinder + Kerucut + Prisma",
+            "fungsi": "Peluncur Luar Angkasa",
+            "tahapan": "Multi-stage booster rocket"
+        }
     },
     {
         "id": "house",
@@ -132,7 +192,11 @@ MODELS_CATALOG = [
         "description": "Kombinasi kubus (dinding) dan prisma segitiga (atap) membentuk arsitektur rumah modern.",
         "difficulty": "Kreatif",
         "color": "#f97316",
-        "specs": {"komposisi": "Kubus + Prisma Segitiga", "arsitektur": "Rumah 3 Dimensi"}
+        "specs": {
+            "komposisi": "Balok + Prisma Segitiga",
+            "arsitektur": "Rumah 3 Dimensi",
+            "fungsi": "Bangunan hunian edukasi"
+        }
     },
     {
         "id": "satellite",
@@ -141,7 +205,11 @@ MODELS_CATALOG = [
         "description": "Satelit orbit dengan badan kubus heksagonal dan dua panel surya persegi panjang membentang.",
         "difficulty": "Kreatif",
         "color": "#64748b",
-        "specs": {"sumber_daya": "Panel Surya", "orbit": "Low Earth Orbit"}
+        "specs": {
+            "sumber_daya": "Panel Surya Fotovoltaik",
+            "orbit": "Low Earth Orbit (LEO)",
+            "fungsi": "Komunikasi & Pengamatan Cuaca"
+        }
     }
 ]
 

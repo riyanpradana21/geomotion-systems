@@ -194,7 +194,8 @@ function calculateRadialMetrics(points: Point[]): {
  */
 export function analyze2DGeometry(
   strokes: Stroke[],
-  thumbnailData?: string
+  thumbnailData?: string,
+  targetShapeName?: string | null
 ): RecognitionResultData {
   // 1. Flatten all points from strokes
   const allPoints: Point[] = [];

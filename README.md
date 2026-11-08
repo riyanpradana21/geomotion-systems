@@ -202,23 +202,30 @@ Jika coretan tangan anak masih bergelombang atau sedikit bengkok:
 - Pilih bangun ruang: **Kubus 3D**, **Limas 3D**, atau **Rumah 3D**.
 - Garis panduan langkah demi langkah (Step 1 -> Step 2 -> Step 3) akan muncul langsung di atas video kamera dan kanvas, lengkap dengan arahan teks ramah anak!
 
-### 5. Peningkatan Kontrol Jari Anti-Salah & Anti-Lelah
-Untuk mengatasi kesulitan anak-anak saat menggerakkan jari di udara:
-- **Pinch Anchor Optimization**: Titik kursor saat menjepit otomatis dihitung dari titik tengah antara ujung jempol dan telunjuk, mengeliminasi lonjakan kursor 20-40px saat jari bergerak mendekati jempol.
-- **Schmitt Trigger Hysteresis**: Ambang aktivasi jepit (0.32) dan lepas (0.43) dipisah, menghentikan garis putus-putus berkedip saat jari berada di batas toleransi.
-- **Mode Kontrol Tangan**:
-  - `👌 Jepit Tahan`: Mode standar, tahan jepit untuk menggambar.
-  - `🔒 Kunci Pena`: Sekali jepit pena terkunci aktif, tangan bisa digerakkan dengan santai tanpa harus menahan jepitan (sangat ramah anak & anti-pegal). Jepit sekali lagi untuk melepaskan pena.
-  - `👆 Tunjuk Bebas`: Menggambar otomatis mengikuti arah telunjuk.
-- **Stabilizer Adaptif**: Pilihan filter `Lembut`, `Stabil (Rekomendasi)`, dan `Ultra Halus` untuk meredam tremor tangan.
+### 5. Peningkatan Kontrol Jari Anti-Salah & Anti-Lelah (Drawing Assist 2D)
+Untuk mengatasi kesulitan saat menggerakkan jari dan mengeluarkan garis pada kanvas 2D:
+- **Pinch Threshold Lebih Santai (0.42 / 0.57)**: Ambang aktivasi jepit diperlonggar secara signifikan, sehingga jari tidak perlu ditekan keras untuk mulai menggambar.
+- **Pill Status Melayang di Atas Kursor (Real-time HUD)**: Menampilkan label status langsung di atas titik ujung jari anak (`✍️ PENA AKTIF`, `🔒 Jepit Sekali utk Kunci`, `👆 Tunjuk & Gambar`, `👌 Dekatkan Jari`).
+- **Mode Kunci Pena (Default Rekomendasi Anak-Anak)**: Cukup jepit sekali untuk mengunci pena ON, anak dapat menggerakkan tangan secara bebas tanpa lelah menahan jepitan, jepit sekali lagi untuk berhenti.
+- **Pinch Anchor Optimization**: Kursor otomatis berjangkar di titik tengah antara jempol dan telunjuk saat menjepit, melenyapkan hentakan/lonjakan garis.
+- **Stabilizer Adaptif**: Pilihan tingkat redaman `Lembut`, `Stabil (Rekomendasi)`, dan `Ultra Halus`.
 
-### 6. Studio 3D Interaktif: Rotasi 360°, Zoom & Katalog Gratis No-Limit
-Menu baru **Studio 3D** menghadirkan eksplorasi objek 3 dimensi WebGL berkinerja tinggi:
-- **Gerakan Tangan 360°**: Miringkan telapak tangan ke kiri/kanan/atas/bawah untuk memutar objek 3D 360 derajat secara mulus.
-- **Zoom In / Zoom Out**: Buka/tutup jarak jari telunjuk dan jempol untuk memperbesar atau memperkecil model 3D secara dinamis.
-- **Translasi Posisi**: Gerakkan telapak tangan ke kiri/kanan/atas/bawah untuk menggeser objek di ruang 3D.
-- **Katalog Gratis No-Limit Tanpa Login**:
-  - Bangun Geometri: Kubus, Balok, Bola, Silinder, Limas Segiempat, Prisma Segitiga.
-  - Model Edukasi Bebas API Key & Tanpa Limit: Planet Bumi (Globe), Roket Antariksa (Apollo 3D), Rumah 3D (Arsitektur), Satelit Orbit.
-- **Perhitungan Python Backend**: Endpoint `POST /api/3d/transform` memvalidasi dan memproses matriks Euler & skala secara real-time.
-- **Hemat Token 100%**: Sepenuhnya dijalankan pada runtime lokal (Client Three.js + MediaPipe WASM + FastAPI), tanpa panggilan ke LLM berbayar atau API eksternal.
+### 6. Studio 3D Interaktif: Skeleton Tangan, Bedah Lapisan Bumi & Exploded View
+Pembaruan komprehensif pada menu **Studio 3D**:
+- **Garis Kerangka Tangan (Live 21-Joint Skeleton Overlay)**: Kamera video pada Studio 3D kini dilengkapi kanvas overlay yang menampilkan 21 titik sendi dan garis tulang jari bercahaya (neon bones), identik dengan fitur 2D!
+- **Gerakan Super Halus (Physics LERP Damping)**: Rotasi 360°, zoom, dan translasi kini menggunakan interpolasi fisika LERP dengan momentum, menghilangkan kesan kaku/patah-patah.
+- **Klik Otomatis dengan Gerakan Tangan (Air Hover & Auto-Select)**: Arahkan ujung jari telunjuk ke kartu model 3D di layar selama 1 detik (lingkaran pengisian hijau penuh) untuk mengganti model secara otomatis tanpa menyentuh mouse atau keyboard!
+- **Planet Bumi Realistis & Bedah Lapisan Bumi**:
+  - Tekstur kanvas prosedural bumi nyata (samudra biru dalam, benua Eurasia, Afrika, Amerika, Australia, Antartika, kepulauan Indonesia, gurun pasir Sahara, dan es kutub).
+  - Lapisan awan atmosfer berputar mandiri dan halo cahaya biru (Fresnel glow).
+  - Tombol **"🌍 Bedah Lapisan Bumi"**: Membuka irisan 90° lapisan geologis bumi:
+    1. Kerak Bumi (*Crust*) - batuan padat.
+    2. Mantel Bumi (*Mantle*) - magma silikat panas menyala.
+    3. Inti Luar (*Outer Core*) - cairan besi-nikel bersuhu ~4.500°C.
+    4. Inti Dalam (*Inner Core*) - bola padat super panas bersuhu ~5.400°C.
+- **Pisah-Pisah Bagian (Exploded View / Jaring-Jaring 3D)**:
+  - Tombol **"💥 Pisah-Pisah Bagian"**: Membuka sisi-sisi bangun ruang dengan animasi halus (Kubus memisah 6 arah, Limas mekar seperti kelopak bunga memperlihatkan tiang tinggi $t$ dan puncak, Tabung membuka tutup dan selimut).
+- **Mode Tembus Pandang (X-Ray + Outline)**:
+  - Permukaan bangun dibuat semi-transparan dengan garis tepi outline putih berkilau, memperlihatkan garis diagonal ruang, pusat massa, dan sumbu tinggi di dalam bangun ruang.
+- **Kartu Edukasi Matematika Interaktif**: Menampilkan rumus luas permukaan ($L$), volume ($V$), jumlah titik sudut/rusuk/sisi, serta contoh nyata di kehidupan sehari-hari.
+- **100% Offline & Hemat Token**: Semua kalkulasi dan rendering Three.js berjalan lokal tanpa API key, tanpa login, dan tanpa batasan kuota.

@@ -167,25 +167,25 @@ export const CanvasBoard = forwardRef<CanvasBoardRef, CanvasBoardProps>(
       ctx.save();
       // Outer aura ring
       ctx.beginPath();
-      ctx.arc(pt.x, pt.y, isDrawing ? 22 : 16, 0, Math.PI * 2);
-      ctx.fillStyle = isDrawing ? 'rgba(16, 185, 129, 0.25)' : 'rgba(99, 102, 241, 0.2)';
+      ctx.arc(pt.x, pt.y, isDrawing ? 24 : 16, 0, Math.PI * 2);
+      ctx.fillStyle = isDrawing ? 'rgba(16, 185, 129, 0.3)' : 'rgba(99, 102, 241, 0.2)';
       ctx.fill();
 
       // Border ring
       ctx.beginPath();
-      ctx.arc(pt.x, pt.y, isDrawing ? 15 : 10, 0, Math.PI * 2);
+      ctx.arc(pt.x, pt.y, isDrawing ? 16 : 10, 0, Math.PI * 2);
       ctx.strokeStyle = isDrawing ? '#10b981' : '#4f46e5';
-      ctx.lineWidth = 2.5;
+      ctx.lineWidth = isDrawing ? 3 : 2;
       ctx.stroke();
 
       // Center solid dot
       ctx.beginPath();
-      ctx.arc(pt.x, pt.y, 4, 0, Math.PI * 2);
+      ctx.arc(pt.x, pt.y, isDrawing ? 5 : 4, 0, Math.PI * 2);
       ctx.fillStyle = isDrawing ? '#059669' : '#4338ca';
       ctx.fill();
 
       // Crosshair lines
-      ctx.strokeStyle = isDrawing ? 'rgba(16, 185, 129, 0.7)' : 'rgba(99, 102, 241, 0.5)';
+      ctx.strokeStyle = isDrawing ? 'rgba(16, 185, 129, 0.8)' : 'rgba(99, 102, 241, 0.5)';
       ctx.lineWidth = 1.5;
       ctx.beginPath();
       ctx.moveTo(pt.x - 24, pt.y);
@@ -198,8 +198,42 @@ export const CanvasBoard = forwardRef<CanvasBoardRef, CanvasBoardProps>(
       ctx.lineTo(pt.x, pt.y + 24);
       ctx.stroke();
 
+      // Floating On-Screen Cursor Hint Pill (Explains exact status to children!)
+      const pillY = pt.y - 32;
+      let statusText = '👌 Jepit untuk Gambar';
+      let pillBg = 'rgba(79, 70, 229, 0.85)';
+
+      if (isDrawing) {
+        statusText = '✍️ PENA AKTIF';
+        pillBg = 'rgba(16, 185, 129, 0.95)';
+      } else if (settings.drawMode === 'toggle') {
+        statusText = '🔒 Jepit Sekali utk Kunci';
+        pillBg = 'rgba(15, 23, 42, 0.85)';
+      } else if (settings.drawMode === 'point') {
+        statusText = '👆 Tunjuk & Gambar';
+        pillBg = 'rgba(14, 165, 233, 0.85)';
+      }
+
+      ctx.font = 'bold 11px sans-serif';
+      const textWidth = ctx.measureText(statusText).width;
+      const pillW = textWidth + 16;
+      const pillH = 20;
+      const pillX = Math.max(10, Math.min(canvas.width - pillW - 10, pt.x - pillW / 2));
+
+      // Draw rounded capsule
+      ctx.fillStyle = pillBg;
+      ctx.beginPath();
+      ctx.roundRect ? ctx.roundRect(pillX, pillY, pillW, pillH, 10) : ctx.rect(pillX, pillY, pillW, pillH);
+      ctx.fill();
+
+      // Text inside capsule
+      ctx.fillStyle = '#ffffff';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(statusText, pillX + pillW / 2, pillY + pillH / 2);
+
       ctx.restore();
-    }, []);
+    }, [settings.drawMode]);
 
     // Resize handling to match container dimensions
     useEffect(() => {

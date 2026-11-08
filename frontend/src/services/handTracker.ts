@@ -89,7 +89,7 @@ export function classifyHandGesture(
   canvasWidth: number,
   canvasHeight: number,
   mirror: boolean = true,
-  pinchThresholdRatio: number = 0.32
+  pinchThresholdRatio: number = 0.42
 ): GestureDetectionResult {
   const wrist = landmarks[0];
   const thumbTip = landmarks[4];
@@ -112,8 +112,9 @@ export function classifyHandGesture(
   const normalizedPinchDist = thumbIndexDist / handScale;
 
   // 3. HYSTERESIS FOR PINCH STATE (Schmitt trigger prevents choppy flickering!)
+  // Relaxed threshold: enter at 0.42, exit at 0.57 for effortless drawing
   const enterThreshold = pinchThresholdRatio;
-  const exitThreshold = pinchThresholdRatio * 1.35; // 35% higher to release
+  const exitThreshold = pinchThresholdRatio * 1.35;
 
   let isPinching = false;
   if (lastPinchState) {
@@ -133,8 +134,8 @@ export function classifyHandGesture(
 
   if (isPinching) {
     // Blend index tip and thumb tip smoothly
-    rawNormX = (indexTip.x * 0.55 + thumbTip.x * 0.45);
-    rawNormY = (indexTip.y * 0.55 + thumbTip.y * 0.45);
+    rawNormX = indexTip.x * 0.55 + thumbTip.x * 0.45;
+    rawNormY = indexTip.y * 0.55 + thumbTip.y * 0.45;
   } else {
     // Pointer mode: directly on fingertip
     rawNormX = indexTip.x;
@@ -214,4 +215,107 @@ export function classifyHandGesture(
     handScale: Math.round(handScale * 1000) / 1000,
     palmCenter,
   };
+}
+
+/**
+ * Shared Hand Skeleton Renderer for Camera Video HUD.
+ * Renders 21 bones, glowing joints, knuckles, fingertips, and pinch aura.
+ */
+export function drawHandSkeleton(
+  ctx: CanvasRenderingContext2D,
+  landmarks: HandLandmark[],
+  w: number,
+  h: number,
+  mirror: boolean = true,
+  isPinching: boolean = false
+) {
+  ctx.save();
+  const connections = [
+    [0, 1], [1, 2], [2, 3], [3, 4],       // Thumb
+    [0, 5], [5, 6], [6, 7], [7, 8],       // Index
+    [0, 9], [9, 10], [10, 11], [11, 12],   // Middle
+    [0, 13], [13, 14], [14, 15], [15, 16], // Ring
+    [0, 17], [17, 18], [18, 19], [19, 20], // Pinky
+    [5, 9], [9, 13], [13, 17],             // Palm Arch
+  ];
+
+  // 1. Draw glowing bone connection lines
+  ctx.lineWidth = 3;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.strokeStyle = isPinching ? 'rgba(16, 185, 129, 0.85)' : 'rgba(99, 102, 241, 0.75)';
+
+  for (const [i, j] of connections) {
+    const p1 = landmarks[i];
+    const p2 = landmarks[j];
+    const x1 = mirror ? (1 - p1.x) * w : p1.x * w;
+    const y1 = p1.y * h;
+    const x2 = mirror ? (1 - p2.x) * w : p2.x * w;
+    const y2 = p2.y * h;
+
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+  }
+
+  // 2. Line between thumb tip and index tip if close
+  const thumb = landmarks[4];
+  const index = landmarks[8];
+  const tx = mirror ? (1 - thumb.x) * w : thumb.x * w;
+  const ty = thumb.y * h;
+  const ix = mirror ? (1 - index.x) * w : index.x * w;
+  const iy = index.y * h;
+
+  ctx.beginPath();
+  ctx.setLineDash([4, 4]);
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = isPinching ? '#10b981' : 'rgba(245, 158, 11, 0.6)';
+  ctx.moveTo(tx, ty);
+  ctx.lineTo(ix, iy);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // 3. Draw landmark joints
+  for (let i = 0; i < landmarks.length; i++) {
+    const lm = landmarks[i];
+    const x = mirror ? (1 - lm.x) * w : lm.x * w;
+    const y = lm.y * h;
+
+    ctx.beginPath();
+    if (i === 8) {
+      // Index Tip (Pen / Cursor Pointer)
+      ctx.arc(x, y, 7, 0, Math.PI * 2);
+      ctx.fillStyle = isPinching ? '#10b981' : '#6366f1';
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#ffffff';
+      ctx.stroke();
+    } else if (i === 4) {
+      // Thumb Tip
+      ctx.arc(x, y, 6.5, 0, Math.PI * 2);
+      ctx.fillStyle = isPinching ? '#10b981' : '#f59e0b';
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#ffffff';
+      ctx.stroke();
+    } else if (i === 0) {
+      // Wrist
+      ctx.arc(x, y, 6, 0, Math.PI * 2);
+      ctx.fillStyle = '#06b6d4';
+      ctx.fill();
+    } else if ([12, 16, 20].includes(i)) {
+      // Other fingertips
+      ctx.arc(x, y, 4.5, 0, Math.PI * 2);
+      ctx.fillStyle = '#818cf8';
+      ctx.fill();
+    } else {
+      // Knuckles
+      ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+      ctx.fill();
+    }
+  }
+
+  ctx.restore();
 }
